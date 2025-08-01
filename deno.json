@@ -1,0 +1,8 @@
+{
+  "tasks": {
+    "run": "deno run -ERWN --env-file=.env src/main.ts"
+  },
+  "imports": {
+    "@std/path": "jsr:@std/path@^1.1.1"
+  }
+}
