@@ -1,4 +1,4 @@
-import { isList, isProductDetailMachine } from "./utils.ts";
+import { isList, isProductDetailMachine, isTable } from "./utils.ts";
 import type { Product } from "./types/main.ts";
 import type { ApiResponse } from "./types/api/main.ts";
 
@@ -44,7 +44,7 @@ export function parse(json: ApiResponse): Product {
     throw new Error("No technical details found.");
   }
 
-  const table = details.data.find((d) => d.type == "metabo-table");
+  const table = details.data.find(isTable);
 
   if (!table) {
     throw new Error("No table found in technical details.");

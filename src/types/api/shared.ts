@@ -149,6 +149,7 @@ export interface ProductAccordionItem {
     | TableElement
     | DownloadElement
     | FullServiceElement
+    | unknown
   )[];
 }
 
