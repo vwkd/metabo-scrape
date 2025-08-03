@@ -1,4 +1,5 @@
-import type { ProductDetailMachine, Row } from "./types/api.ts";
+import type { ProductDetailMachine } from "./types/api/product-detail-machine.ts";
+import type { Row } from "./types/api/shared.ts";
 
 export function isProductDetailMachine(
   obj: unknown,

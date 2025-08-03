@@ -1,6 +1,6 @@
 import { isList, isProductDetailMachine } from "./utils.ts";
 import type { Product } from "./types/main.ts";
-import type { ApiResponse } from "./types/api.ts";
+import type { ApiResponse } from "./types/api/main.ts";
 
 const BASE_URL = "https://www.metabo.com";
 

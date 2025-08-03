@@ -1,6 +1,6 @@
 import { delay } from "@std/async/delay";
 import { join, parse } from "@std/path";
-import type { ApiResponse } from "./types/api.ts";
+import type { ApiResponse } from "./types/api/main.ts";
 
 const BASE_URL = "https://www.metabo.com";
 const API_URL = join(BASE_URL, "/api/cms/get");
