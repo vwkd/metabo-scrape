@@ -6,7 +6,9 @@ import type { Product } from "./types/main.ts";
  * @param productsByCategory products grouped by category
  * @returns markdown string
  */
-export function render(productsByCategory: Record<string, Product[]>): string {
+export function render(
+  productsByCategory: Record<string, Product[]>,
+): string {
   let res = "# Metabo Produkte";
 
   for (const category in productsByCategory) {
@@ -19,8 +21,10 @@ export function render(productsByCategory: Record<string, Product[]>): string {
 
       res += `\n\n![](${product.image})\n`;
 
-      for (const spec of product.specs) {
-        res += `\n- ${spec.name}: ${spec.value}`;
+      if (product.specs) {
+        for (const spec of product.specs) {
+          res += `\n- ${spec.name}: ${spec.value}`;
+        }
       }
 
       res += `\n- Bestell-Nr.: ${product.sku}`;

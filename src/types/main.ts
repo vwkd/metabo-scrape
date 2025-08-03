@@ -2,7 +2,7 @@ export interface Product {
   category: string;
   title: string;
   image: string;
-  specs: Spec[];
+  specs?: Spec[];
   sku: string;
   url: string;
 }

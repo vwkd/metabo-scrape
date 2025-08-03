@@ -1,4 +1,5 @@
 import type { ProductDetailMachine } from "./types/api/product-detail-machine.ts";
+import type { ProductDetailAccessory } from "./types/api/product-detail-accessory.ts";
 import type { Row, TableElement } from "./types/api/shared.ts";
 
 export function isProductDetailMachine(
@@ -6,6 +7,13 @@ export function isProductDetailMachine(
 ): obj is ProductDetailMachine {
   return typeof obj === "object" && obj !== null && "type" in obj &&
     obj.type === "product-detail-machine";
+}
+
+export function isProductDetailAccessory(
+  obj: unknown,
+): obj is ProductDetailAccessory {
+  return typeof obj === "object" && obj !== null && "type" in obj &&
+    obj.type === "product-detail-accessory";
 }
 
 export function isTable(obj: unknown): obj is TableElement {

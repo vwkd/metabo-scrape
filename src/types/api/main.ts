@@ -1,4 +1,5 @@
 import type { ProductDetailMachine } from "./product-detail-machine.ts";
+import type { ProductDetailAccessory } from "./product-detail-accessory.ts";
 
 /**
  * Client-side routing API response for product page
@@ -14,5 +15,5 @@ interface Elements {
 }
 
 interface Main {
-  data: (ProductDetailMachine | unknown)[];
+  data: (ProductDetailMachine | ProductDetailAccessory | unknown)[];
 }

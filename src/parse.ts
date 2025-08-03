@@ -1,4 +1,9 @@
-import { isList, isProductDetailMachine, isTable } from "./utils.ts";
+import {
+  isList,
+  isProductDetailAccessory,
+  isProductDetailMachine,
+  isTable,
+} from "./utils.ts";
 import type { Product } from "./types/main.ts";
 import type { ApiResponse } from "./types/api/main.ts";
 
@@ -11,8 +16,8 @@ const BASE_URL = "https://www.metabo.com";
  * @returns product
  */
 export function parse(json: ApiResponse): Product {
-  const data = json.elements.main.data.find(
-    isProductDetailMachine,
+  const data = json.elements.main.data.find((d) =>
+    isProductDetailMachine(d) || isProductDetailAccessory(d)
   );
 
   if (!data) {
@@ -24,7 +29,11 @@ export function parse(json: ApiResponse): Product {
   const sku = data.data.productDetailBox.product.sku;
 
   const titleStr = data.data.productDetailBox.product.title;
-  const titleRegex = new RegExp(`^(.+) \\(${sku}\\) ${category}$`);
+  const titleRegex = new RegExp(
+    isProductDetailMachine(data)
+      ? `^(.+) \\(${sku}\\) ${category}$`
+      : `^(.+) \\(${sku}\\)$`,
+  );
   const titleMatch = titleStr.match(titleRegex);
   if (!titleMatch) {
     throw new Error(`Unexpected title format: ${titleStr}`);
@@ -36,36 +45,37 @@ export function parse(json: ApiResponse): Product {
   urlObj.search = "";
   const url = urlObj.href;
 
+  let specs: Product["specs"] = undefined;
   const details = data.data.productAccordion.items.find((
     item,
   ) => item.title == "Technische Details");
 
-  if (!details) {
+  if (details) {
+    const table = details.data.find(isTable);
+
+    if (table) {
+      const specsTable = table.data.tables.find((t) => t.title == "KENNWERTE");
+
+      if (specsTable) {
+        const rows = specsTable.rows;
+
+        if (!isList(rows)) {
+          specs = rows.map((row) => ({
+            name: row.subline,
+            value: row.usp,
+          }));
+        } else if (isProductDetailMachine(data)) {
+          throw new Error("No table rows found in specs.");
+        }
+      } else if (isProductDetailMachine(data)) {
+        throw new Error("No specs found in table.");
+      }
+    } else if (isProductDetailMachine(data)) {
+      throw new Error("No table found in technical details.");
+    }
+  } else if (isProductDetailMachine(data)) {
     throw new Error("No technical details found.");
   }
-
-  const table = details.data.find(isTable);
-
-  if (!table) {
-    throw new Error("No table found in technical details.");
-  }
-
-  const specs = table.data.tables.find((t) => t.title == "KENNWERTE");
-
-  if (!specs) {
-    throw new Error("No specs found in table.");
-  }
-
-  const rows = specs.rows;
-
-  if (isList(rows)) {
-    throw new Error("No table rows found in specs.");
-  }
-
-  const specs = rows.map((row) => ({
-    name: row.subline,
-    value: row.usp.trim(),
-  }));
 
   return {
     category,
