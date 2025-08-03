@@ -3,7 +3,7 @@ export interface ImageNavSlider {
 }
 
 export interface Media {
-  data: Image[];
+  data: (Image | VideoDispatcher | unknown)[];
 }
 
 export interface Image {
@@ -20,6 +20,22 @@ export interface ImageData {
   title: string;
   copyright: string;
   variant: string;
+}
+
+export interface VideoDispatcher {
+  data: VideoDispatcherData;
+  type: "base-video-dispatcher";
+}
+
+export interface VideoDispatcherData {
+  src: string;
+  format: string;
+  autoplay: boolean;
+  muted: boolean;
+  loop: boolean;
+  controls: boolean;
+  playsinline: boolean;
+  modifier: string;
 }
 
 export interface ProductHighlight {
